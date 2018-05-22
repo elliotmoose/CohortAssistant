@@ -1,9 +1,9 @@
 
 class TelegramBot
 {
-    constructor()
+    constructor(token)
     {
-
+        this._token = token
     }
     
     SendMessage(message) {
