@@ -7,8 +7,8 @@ const token = '604131058:AAGTND-Yr4GNyNwCJMx-YWL-0JrtUdZ_nGM';
 
 app.get('/', (req, res) => {
     var hmwk = new Homework("Elliot")
-    bot.SendMessage("HELLO CONSOLE!!!")
-    res.send(hmwk.name)
+    //bot.SendMessage("HELLO CONSOLE!!!")
+    res.send("HAN KEONG IS SO SEXY")
 
 
 })
