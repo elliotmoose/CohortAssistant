@@ -1,5 +1,8 @@
+let fs = require('fs')
+
 class HomeworkManager
 {
+
     constructor()
     {
         this._list = []
@@ -23,7 +26,29 @@ class HomeworkManager
     Export()
     {
         return JSON.stringify(this._list)
-        //return {name: "Elliot"}
+    }
+
+    Save()
+    {
+        fs.writeFile('data.txt',JSON.stringify(this._list),function(err){
+            if(err)
+            {
+                throw err
+            }
+        })
+    }
+
+    Load()
+    {
+        if (fs.exists('data.txt'))
+        {
+            fs.readFile('data.txt')
+        }
+        else
+        {
+            console.log('Data file does not exist. Attempting to initialize')
+            this.Save()
+        }
     }
 }
 
