@@ -13,69 +13,69 @@ var manager = new HomeworkManager()
 
 manager.Load()
 
-//#endregion
-bot.start((ctx) => ctx.reply('Welcome'))
+
+//================================================================================================================================================//Menu Index 0
+bot.start((ctx) =>
+    ctx.telegram.sendMessage(ctx.message.chat.id, GetMenuText('0'), {
+        reply_markup: {
+            inline_keyboard: GetMenuOptions('0')
+        }
+    })
+)
+
 bot.on('text', function (ctx) {
-    
-
-    if (ctx.message.text == "Show") {
-        var output = "Homework: \n"
-
-        manager.list.forEach(hwmk => {
-            var name = hwmk._name
-            var date = hwmk._deadline
-            var subject = hwmk._subject
-            output = output + `${subject}: ${name} - ${date}  \n`
-        });
-        
-        ctx.reply(output)
-        ctx.telegram.sendMessage(ctx.message.chat.id,'Show:',{
-            reply_markup: {
-                inline_keyboard: [[{
-                    text: 'Show Homework',
-                    switch_inline_query: 'share'
-                }]]
+    switch (ctx.message.text) {
+        case 'Show':
+            {
+                ctx.reply(manager.Show(),{parse_mode: 'HTML'})
             }
-        })
-    }
-    else {
-        ctx.reply('wazzup')
+
+        default:
+            {
+                ctx.reply('Sorry I dont quite understand')
+            }
     }
 })
+
+//WHEN BUTTON IS PRESSED
+bot.on("callback_query", (ctx) => {
+    //console.log(ctx.callbackQuery.data)
+    ctx.editMessageText(GetMenuText(ctx.callbackQuery.data), {
+        reply_markup: {
+            inline_keyboard: GetMenuOptions(ctx.callbackQuery.data)
+        },
+        parse_mode: 'HTML'
+    })
+
+});
 
 
 //#region express
 app.get('/', (req, res) => {
-    
+
     let query = req.query
-    if (query.q == "add")
-    {
-        if(query.token == "password" && query.name != null && query.date != null && query.subject != null)
-        {
-            try
-            {
-                var newHmwk = new Homework(query.name,query.date,query.subject)
+    if (query.q == "add") {
+        if (query.token == "password" && query.name != null && query.date != null && query.subject != null) {
+            try {
+                var newHmwk = new Homework(query.name, query.date, query.subject)
                 manager.AddHomework(newHmwk)
                 manager.Save()
                 manager.Load()
                 res.send(manager.Export())
                 return
             }
-            catch(err)
-            {
+            catch (err) {
                 console.log(err)
                 res.send(err)
                 return
             }
         }
-        else
-        {
+        else {
             res.send("Please specify the following: name, date, subject")
             return
         }
-    }   
-    else
-    {
+    }
+    else {
         res.send("Please specify a valid query")
         return
     }
@@ -83,6 +83,47 @@ app.get('/', (req, res) => {
     //res.send(req.query)
     res.send(manager.Export())
 })
+
+function GetMenuText(mode)
+{
+    switch(mode)
+    {
+        case '0':
+        {
+            return 'Wecome to school boi'
+        }
+
+        case 'refresh':
+        {
+            return manager.Show()
+        }
+    }
+}
+
+function GetMenuOptions(mode)
+{
+    switch(mode)
+    {
+        case '0':
+        {
+            return [[{
+                text: 'Show Homework',
+                callback_data: 'refresh'
+            }]]
+        }
+
+        case 'refresh':
+        {
+            return [[{
+                text: 'Refresh',
+                callback_data: 'refresh'
+            }], [{
+                text: 'Back <<',
+                callback_data: '0'
+            }]]
+        }
+    }
+}
 
 
 app.listen(8080)
