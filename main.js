@@ -88,7 +88,7 @@ function GetMenuText(mode) {
 
         case 'refresh':
             {
-                return manager.Show()
+                return manager.Show(true)
             }
     }
 }

@@ -1,7 +1,17 @@
 [
     {
-        "_name": "MathHmwk1",
-        "_deadline": "22052018",
+        "_name": "somenewhmwk",
+        "_deadline": "20180117T1300",
         "_subject": "Math"
+    },
+    {
+        "_name": "Hmwk2",
+        "_deadline": "20180227T1300",
+        "_subject": "Physics"
+    },
+    {
+        "_name": "Hmwk2",
+        "_deadline": "20180527T1300",
+        "_subject": "Chem"
     }
 ]

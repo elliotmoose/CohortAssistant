@@ -14,8 +14,8 @@ class HomeworkManager {
         this._list = list
     }
 
-    AddHomework(hwmk) {
-        this._list.push(hwmk)        
+    AddHomework(hmwk) {
+        this._list.push(hmwk)
     }
 
     RemoveHomework(index) {
@@ -28,6 +28,7 @@ class HomeworkManager {
 
     Save() {
         let self = this
+
         fs.writeFile('data.json', JSON.stringify(this._list), function (err) {
             if (err) {
                 throw err
@@ -41,6 +42,19 @@ class HomeworkManager {
         if (fs.existsSync('data.json')) {
             var data = fs.readFileSync('data.json')
             this.list = JSON.parse(data)
+
+            //sort by deadline
+            this.list.sort(function (a, b) {
+                if (a._deadline < b._deadline) {
+                    return -1
+                }
+                else if (a._deadline > b._deadline) {
+                    return 1
+                }
+                else {
+                    return 0
+                }
+            })
         }
         else {
             console.log('Data file does not exist. Attempting to initialize')
@@ -67,58 +81,56 @@ class HomeworkManager {
         }
     }
 
-    Show(mode) //returns a string to be output
+    Show(subjectSort) //returns a string to be output
     {
+        var self = this
         var output = "<b>Homework:</b> \n"
 
-        switch (mode) {
-            case 0: //Sort by deadline
-                {
+        if (subjectSort) {
+            var subjects = []
+            var subject_data = []
 
+            self.list.forEach(function (hmwk, id) {
+                var index = subjects.indexOf(hmwk._subject) //if the subject is already present it will not be 0
+                if (index == -1) { //subject not preset
+                    subjects.push(hmwk._subject)
+                    subject_data[hmwk._subject] = []
+                    subject_data[hmwk._subject].push(hmwk)
                 }
-
-            case 1: //Sort by subject and deadline
-                {
-                    var subjects = []
-                    var subject_data = []
-                    this.list.forEach(hmwk => {
-                        if (subjects.indexOf(hwmk._subject) == -1) {
-                            subjects.push(hwmk.subject)
-                            subject_data.push(hmwk)
-                        }
-                        else {
-
-                        }
-                    })
+                else { //subject already present
+                    var subject = subjects[index]
+                    subject_data[subject].push(hmwk)
                 }
+            })
+
+            subjects.forEach(function (subject, id) {
+                var homeworks = subject_data[subject]
+                output = output + `<b>${subject}</b>: \n`
+
+                homeworks.forEach(function (homework, id) {
+                    output = output + `   ${self.list.indexOf(homework)})${homework._name} ${homework._deadline} \n`
+                })
+
+                output = output + "\n"
+            })
+        }
+        else {
+            this.list.forEach(function (hmwk, id) {
+                var hmwkFormatted = `${id})${hmwk._subject} ${hmwk._name} ${hmwk._deadline}`
+                output = output + hmwkFormatted + "\n"
+            })
         }
 
-
-        // for(var i = 0; i < this.list.length; i++)
-        // {
-        //     var hmwk = this.list[i]
-        //     var hmwkFormatted = `${i}) ${hmwk._subject} ${hmwk._name} ${hmwk._deadline}`
-
-        //     output = output + hmwkFormatted + "\n"
-        // }
-
-
-        this.list.forEach(function (hmwk, id) {
-            var hmwkFormatted = `${id})${hmwk._subject} ${hmwk._name} ${hmwk._deadline}`
-            output = output + hmwkFormatted + "\n"
-        })
 
         return output
     }
 
     HmwkFormatted(index) {
-        if(index >= 0 && index < this.list.length)
-        {
+        if (index >= 0 && index < this.list.length) {
             var hmwk = this.list[index]
             return `${hmwk._subject} ${hmwk._name} ${hmwk._deadline}`
         }
-        else
-        {
+        else {
             return ''
         }
     }
@@ -127,5 +139,5 @@ class HomeworkManager {
 
 // var manager = new HomeworkManager()
 // manager.Load()
-// console.log(manager.Show())
+// console.log(manager.Show(true))
 module.exports = HomeworkManager;
