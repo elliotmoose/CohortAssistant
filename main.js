@@ -23,18 +23,40 @@ bot.start((ctx) =>
     })
 )
 
-bot.on('text', function (ctx) {
-    switch (ctx.message.text) {
-        case 'Show':
-            {
-                ctx.reply(manager.Show(),{parse_mode: 'HTML'})
-            }
+// bot.on('text', function (ctx) {
+//     switch (ctx.message.text) {
+//         case 'Show':
+//             {
+//                 ctx.reply(manager.Show(),{parse_mode: 'HTML'})
+//                 break
+//             }
 
-        default:
-            {
-                ctx.reply('Sorry I dont quite understand')
-            }
+//         default:
+//             {
+//                 ctx.reply('Sorry I dont quite understand')
+//             }
+//     }
+// })
+
+bot.command('add',function(ctx){
+    //ADDING HMWK: <Subject> <Deadline> <Name> 
+    var components = ctx.message.text.split(" ")
+    
+    if(components.length < 4)
+    {
+        ctx.reply("Please provide a proper format as such: \n<b>SUBJECT &lt;space&gt; DATE &lt;space&gt; NAME</b>",{parse_mode: 'HTML'})
+        return
     }
+
+    var subject = components[1]
+    var name = components[2]
+    var deadline = components[3]
+    
+    var hmwk = new Homework(name,deadline,subject)
+    manager.AddHomework(hmwk)
+    manager.Save()
+
+    ctx.reply(`<b>ADDED:</b> ${subject}: ${name} by ${deadline}`,{parse_mode: 'HTML'})
 })
 
 //WHEN BUTTON IS PRESSED
@@ -60,7 +82,6 @@ app.get('/', (req, res) => {
                 var newHmwk = new Homework(query.name, query.date, query.subject)
                 manager.AddHomework(newHmwk)
                 manager.Save()
-                manager.Load()
                 res.send(manager.Export())
                 return
             }

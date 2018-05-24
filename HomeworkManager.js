@@ -23,10 +23,13 @@ class HomeworkManager {
     }
 
     Save() {
+        let self = this
         fs.writeFile('data.txt', JSON.stringify(this._list), function (err) {
             if (err) {
                 throw err
             }
+            
+            self.Load()
         })
     }
 
@@ -76,6 +79,22 @@ class HomeworkManager {
             }
 
             case 1: //Sort by subject and deadline
+            {
+                var subjects = []
+                var subject_data = []
+                this.list.forEach(hmwk=>
+                {
+                    if(subjects.indexOf(hwmk._subject) == -1)
+                    {
+                        subjects.push(hwmk.subject)
+                        subject_data.push(hmwk)
+                    }
+                    else
+                    {
+
+                    }
+                })
+            }
         }
         
 
