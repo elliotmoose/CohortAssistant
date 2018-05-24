@@ -15,7 +15,11 @@ class HomeworkManager {
     }
 
     AddHomework(hwmk) {
-        this._list.push(hwmk)
+        this._list.push(hwmk)        
+    }
+
+    RemoveHomework(index) {
+        this._list.splice(index, 1)
     }
 
     Export() {
@@ -28,42 +32,38 @@ class HomeworkManager {
             if (err) {
                 throw err
             }
-            
+
             self.Load()
         })
     }
 
     Load() {
-        if(fs.existsSync('data.txt'))
-        {
+        if (fs.existsSync('data.txt')) {
             var data = fs.readFileSync('data.txt')
             this.list = JSON.parse(data)
         }
-        else
-        {
+        else {
             console.log('Data file does not exist. Attempting to initialize')
             this.Save()
         }
     }
 
-    Sort(mode)
-    {
-        switch (mode)
-        {
+    Sort(mode) {
+        switch (mode) {
             case 0: //deadline
-            {
+                {
 
-            }
+                }
 
             case 1: //subject and deadline
-            {
+                {
 
-            }
+                }
 
             case 2: //difficulty
-            {
+                {
 
-            }
+                }
         }
     }
 
@@ -71,44 +71,63 @@ class HomeworkManager {
     {
         var output = "<b>Homework:</b> \n"
 
-        switch(mode)
-        {
+        switch (mode) {
             case 0: //Sort by deadline
-            {
+                {
 
-            }
+                }
 
             case 1: //Sort by subject and deadline
-            {
-                var subjects = []
-                var subject_data = []
-                this.list.forEach(hmwk=>
                 {
-                    if(subjects.indexOf(hwmk._subject) == -1)
-                    {
-                        subjects.push(hwmk.subject)
-                        subject_data.push(hmwk)
-                    }
-                    else
-                    {
+                    var subjects = []
+                    var subject_data = []
+                    this.list.forEach(hmwk => {
+                        if (subjects.indexOf(hwmk._subject) == -1) {
+                            subjects.push(hwmk.subject)
+                            subject_data.push(hmwk)
+                        }
+                        else {
 
-                    }
-                })
-            }
+                        }
+                    })
+                }
         }
-        
-
-        this.list.forEach(hwmk => {
 
 
-            var name = hwmk._name
-            var date = hwmk._deadline
-            var subject = hwmk._subject
-            output = output + `${subject}: ${name} - ${date} \n`
-        });
+        // for(var i = 0; i < this.list.length; i++)
+        // {
+        //     var hmwk = this.list[i]
+        //     var hmwkFormatted = `${i}) ${hmwk._subject} ${hmwk._name} ${hmwk._deadline}`
+
+        //     output = output + hmwkFormatted + "\n"
+        // }
+
+
+        this.list.forEach(function (hmwk, id) {
+            var hmwkFormatted = `${id})${hmwk._subject} ${hmwk._name} ${hmwk._deadline}`
+            output = output + hmwkFormatted + "\n"
+        })
 
         return output
     }
+
+    HmwkFormatted(index) {
+        if(index >= 0 && index < this.list.length)
+        {
+            var hmwk = this.list[index]
+            return `${hmwk._subject} ${hmwk._name} ${hmwk._deadline}`
+        }
+        else
+        {
+            return ''
+        }
+    }
+
 }
+
+// var manager = new HomeworkManager()
+// manager.Load()
+// console.log(manager.Show())
+
 
 module.exports = HomeworkManager;

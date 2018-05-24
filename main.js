@@ -22,41 +22,47 @@ bot.start((ctx) =>
         }
     })
 )
+bot.command('show',function(ctx){
+    ctx.reply(GetMenuText('refresh'),{reply_markup: {
+        inline_keyboard: GetMenuOptions('refresh')
+    },parse_mode: 'HTML'})
+})
 
-// bot.on('text', function (ctx) {
-//     switch (ctx.message.text) {
-//         case 'Show':
-//             {
-//                 ctx.reply(manager.Show(),{parse_mode: 'HTML'})
-//                 break
-//             }
-
-//         default:
-//             {
-//                 ctx.reply('Sorry I dont quite understand')
-//             }
-//     }
-// })
-
-bot.command('add',function(ctx){
-    //ADDING HMWK: <Subject> <Deadline> <Name> 
+bot.command('add', function (ctx) {
+    //ADDING HMWK: /add <Subject> <Deadline> <Name> 
     var components = ctx.message.text.split(" ")
-    
-    if(components.length < 4)
-    {
-        ctx.reply("Please provide a proper format as such: \n<b>SUBJECT &lt;space&gt; DATE &lt;space&gt; NAME</b>",{parse_mode: 'HTML'})
+
+    if (components.length < 4) {
+        ctx.reply("Please provide a proper format as such: \n<b>SUBJECT &lt;space&gt; DATE &lt;space&gt; NAME</b>", { parse_mode: 'HTML' })
         return
     }
 
     var subject = components[1]
     var name = components[2]
     var deadline = components[3]
-    
-    var hmwk = new Homework(name,deadline,subject)
+
+    var hmwk = new Homework(name, deadline, subject)
     manager.AddHomework(hmwk)
     manager.Save()
 
-    ctx.reply(`<b>ADDED:</b> ${subject}: ${name} by ${deadline}`,{parse_mode: 'HTML'})
+    ctx.reply(`<b>ADDED:</b> ${subject}: ${name} by ${deadline}`, { parse_mode: 'HTML' })
+})
+
+bot.command('remove', function (ctx) {
+    //REMOVING HMWK: /remove index
+    var components = ctx.message.text.split(" ")
+    if (components.length == 2) {
+        var index = parseInt(components[1])
+        if (index < manager.list.length) {
+            var reply = `Removed ${manager.HmwkFormatted(index)}`
+            manager.RemoveHomework(index)
+            manager.Save()
+            ctx.reply(reply)
+
+            return
+        }
+    }
+    ctx.reply("Please provide a proper format e.g: \n <b>/remove 0</b>", { parse_mode: 'HTML' })
 })
 
 //WHEN BUTTON IS PRESSED
@@ -70,6 +76,50 @@ bot.on("callback_query", (ctx) => {
     })
 
 });
+
+
+
+//callback_query.data = {next: "keyword",params: "data"}
+function GetMenuText(mode) {
+    switch (mode) {
+        case '0':
+            {
+                return 'Wecome to school boi'
+            }
+
+        case 'refresh':
+            {
+                return manager.Show()
+            }
+    }
+}
+
+function GetMenuOptions(mode) {
+    switch (mode) {
+        case '0':
+            {
+                return [[{
+                    text: 'Show Homework',
+                    callback_data: 'refresh'
+                }]]
+            }
+
+        case 'refresh':
+            {
+                return [[{
+                    text: 'Refresh',
+                    callback_data: 'refresh'
+                },{
+                    text: 'Back <<',
+                    callback_data: '0'
+                }]]
+            }
+    }
+}
+
+
+bot.startPolling()
+
 
 
 //#region express
@@ -104,48 +154,6 @@ app.get('/', (req, res) => {
     //res.send(req.query)
     res.send(manager.Export())
 })
-
-function GetMenuText(mode)
-{
-    switch(mode)
-    {
-        case '0':
-        {
-            return 'Wecome to school boi'
-        }
-
-        case 'refresh':
-        {
-            return manager.Show()
-        }
-    }
-}
-
-function GetMenuOptions(mode)
-{
-    switch(mode)
-    {
-        case '0':
-        {
-            return [[{
-                text: 'Show Homework',
-                callback_data: 'refresh'
-            }]]
-        }
-
-        case 'refresh':
-        {
-            return [[{
-                text: 'Refresh',
-                callback_data: 'refresh'
-            }], [{
-                text: 'Back <<',
-                callback_data: '0'
-            }]]
-        }
-    }
-}
-
-
 app.listen(8080)
-bot.startPolling()
+
+//#endregion
