@@ -74,7 +74,6 @@ bot.on("callback_query", (ctx) => {
         },
         parse_mode: 'HTML'
     })
-
 });
 
 
@@ -84,7 +83,7 @@ function GetMenuText(mode) {
     switch (mode) {
         case '0':
             {
-                return 'Wecome to school boi'
+                return 'What\'s going on?'
             }
 
         case 'refresh':
