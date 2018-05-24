@@ -28,7 +28,7 @@ class HomeworkManager {
 
     Save() {
         let self = this
-        fs.writeFile('data.txt', JSON.stringify(this._list), function (err) {
+        fs.writeFile('data.json', JSON.stringify(this._list), function (err) {
             if (err) {
                 throw err
             }
@@ -38,8 +38,8 @@ class HomeworkManager {
     }
 
     Load() {
-        if (fs.existsSync('data.txt')) {
-            var data = fs.readFileSync('data.txt')
+        if (fs.existsSync('data.json')) {
+            var data = fs.readFileSync('data.json')
             this.list = JSON.parse(data)
         }
         else {
@@ -128,6 +128,4 @@ class HomeworkManager {
 // var manager = new HomeworkManager()
 // manager.Load()
 // console.log(manager.Show())
-
-
 module.exports = HomeworkManager;
