@@ -22,10 +22,12 @@ bot.start((ctx) =>
         }
     })
 )
-bot.command('show',function(ctx){
-    ctx.reply(GetMenuText('refresh'),{reply_markup: {
-        inline_keyboard: GetMenuOptions('refresh')
-    },parse_mode: 'HTML'})
+bot.command('show', function (ctx) {
+    ctx.reply(GetMenuText('show-subject'), {
+        reply_markup: {
+            inline_keyboard: GetMenuOptions('show-subject')
+        }, parse_mode: 'HTML'
+    })
 })
 
 bot.command('add', function (ctx) {
@@ -86,7 +88,11 @@ function GetMenuText(mode) {
                 return 'What\'s going on?'
             }
 
-        case 'refresh':
+        case 'show-deadline':
+            {
+                return manager.Show(false)
+            }
+        case 'show-subject':
             {
                 return manager.Show(true)
             }
@@ -98,19 +104,39 @@ function GetMenuOptions(mode) {
         case '0':
             {
                 return [[{
-                    text: 'Show Homework',
-                    callback_data: 'refresh'
-                }]]
+                    text: 'By Deadline',
+                    callback_data: 'show-deadline'
+                }, {
+                    text: 'By Subject',
+                    callback_data: 'show-subject'
+                }
+                ]]
             }
 
-        case 'refresh':
+        case 'show-deadline':
             {
                 return [[{
-                    text: 'Refresh',
-                    callback_data: 'refresh'
-                },{
+                    text: 'By Subject',
+                    callback_data: 'show-subject'
+                }, {
                     text: 'Back <<',
                     callback_data: '0'
+                }],[{
+                    text: 'Refresh',
+                    callback_data: 'show-deadline'
+                }]]
+            }
+            case 'show-subject':
+            {
+                return [[{
+                    text: 'By Deadline',
+                    callback_data: 'show-deadline'
+                }, {
+                    text: 'Back <<',
+                    callback_data: '0'
+                }],[{
+                    text: 'Refresh',
+                    callback_data: 'show-subject'
                 }]]
             }
     }
