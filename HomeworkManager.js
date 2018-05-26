@@ -62,25 +62,6 @@ class HomeworkManager {
         }
     }
 
-    Sort(mode) {
-        switch (mode) {
-            case 0: //deadline
-                {
-
-                }
-
-            case 1: //subject and deadline
-                {
-
-                }
-
-            case 2: //difficulty
-                {
-
-                }
-        }
-    }
-
     Show(subjectSort) //returns a string to be output
     {
         var self = this
@@ -117,7 +98,7 @@ class HomeworkManager {
         }
         else {
             this.list.forEach(function (hmwk, id) {
-                var hmwkFormatted = `${id})${hmwk._subject} ${hmwk._name} ${self.ICalToPresentable(hmwk._deadline)}` //0) Math Hmwk_Name 24-May
+                var hmwkFormatted = `${id})${hmwk._subject} ${hmwk._name} <b>${self.ICalToPresentable(hmwk._deadline)}</b>` //0) Math Hmwk_Name 24-May
                 output = output + hmwkFormatted + "\n"
             })
         }
@@ -135,7 +116,7 @@ class HomeworkManager {
         }
     }
 
-    ICalToPresentable(date)
+    ICalToPresentable(date,contextual)
     {
         var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
         var output = ""
@@ -143,18 +124,36 @@ class HomeworkManager {
         var year = date.substr(0,4)
         var monthIndex = parseInt(date.substr(4,2))-1
         var day = date.substr(6,2)
-        var hour = date.substr(9,2)
+        //var hour = date.substr(9,2)
+        var hour = parseInt(date.substr(9,2)) 
         var min = date.substr(11,2)
 
-        var month = ""
-        if(monthIndex >= 0 && monthIndex < months.length )
+        var ext = "am"
+        
+        if(hour > 11)
         {
-            month = months[monthIndex]
+            ext = "pm"
+            hour = hour - 12
         }
+        
 
-        //output = `d:${day} m:${month} y:${year} HH: ${hour} MM: ${min}`
-        output = `${day}${month} ${hour}${min}`
-        return output
+        if (contextual) //27/5 into  "next friday 1200 pm"
+        {
+            var days = ["Mon,Tues,Wed,Thurs,Fri,Sat,Sun"]
+            var day = days[new Date(year,month,day,hour,min).getDate()]
+        }
+        else
+        {
+            var month = ""
+            if(monthIndex >= 0 && monthIndex < months.length )
+            {
+                month = months[monthIndex]
+            }
+    
+            //output = `d:${day} m:${month} y:${year} HH: ${hour} MM: ${min}`
+            output = `${day} ${month} ${hour}:${min}${ext}`
+            return output
+        }
     }
 
 }

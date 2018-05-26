@@ -1,17 +1,27 @@
 [
     {
-        "_name": "somenewhmwk",
-        "_deadline": "20180117T1300",
+        "_name": "MCQ",
+        "_deadline": "20180527T2359",
+        "_subject": "Chem"
+    },
+    {
+        "_name": "Pre-Cohort",
+        "_deadline": "20180528T1530",
         "_subject": "Math"
     },
     {
-        "_name": "Hmwk2",
-        "_deadline": "20180227T1300",
-        "_subject": "Physics"
+        "_name": "HW2",
+        "_deadline": "20180528T1800",
+        "_subject": "Math"
     },
     {
-        "_name": "Hmwk2",
-        "_deadline": "20180527T1300",
+        "_name": "Pre-Class Assignment",
+        "_deadline": "20180530T2359",
         "_subject": "Chem"
+    },
+    {
+        "_name": "HW2",
+        "_deadline": "20180601T1300",
+        "_subject": "Physics"
     }
 ]
