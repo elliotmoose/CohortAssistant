@@ -44,7 +44,7 @@ bot.command('add', function (ctx) {
     var name = ""
     var deadlineEntry = ""
 
-    var components = ctx.message.text.split(`"`)
+    var components = ctx.message.text.split(/"|'|“|”|’|‘/) 
     if(components.length >= 3) //if name explicitly specified
     {
         subject = CapsFirstLetter(components[0].split(" ")[1].trim())

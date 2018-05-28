@@ -26,7 +26,7 @@ class DateParser {
 
         var ext = "am"
 
-        if (parseInt(hour) > 11) {
+        if (parseInt(hour) > 12) {
             ext = "pm"
             hour = parseInt(hour) - 12
         }

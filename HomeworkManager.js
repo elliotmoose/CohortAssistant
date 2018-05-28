@@ -119,11 +119,12 @@ class HomeworkManager {
 
 }
 
-var manager = new HomeworkManager()
-manager.Load()
+// var manager = new HomeworkManager()
+// manager.Load()
 // console.log(manager.Show(true))
 
 // console.log(DateParser.ICalToPresentable('20180822T1022'))
 
-console.log(manager.Show())
+// console.log(manager.Show())
+
 module.exports = HomeworkManager;
