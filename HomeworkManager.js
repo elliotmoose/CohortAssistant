@@ -91,7 +91,7 @@ class HomeworkManager {
                 output = output + `<b>${subject}</b>: \n`
 
                 homeworks.forEach(function (homework, id) {
-                    output = output + `   ${self.list.indexOf(homework)}) <b>${homework._name}</b> ${DateParser.ICalToPresentable(homework._deadline)} \n`
+                    output = output + `   ${self.list.indexOf(homework)}) <b>${homework._name}</b> ${DateParser.ICalToPresentable(homework._deadline,true)} \n`
                 })
 
                 output = output + "\n"

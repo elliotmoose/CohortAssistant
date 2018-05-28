@@ -196,12 +196,13 @@ bot.startPolling()
 function FormatDeadline(input)
 {
     console.log("Format:"+input)
+    //shell.exec(`./formate ${name} ${adsad}`)
     return input
 }
-
 
 function CapsFirstLetter(input)
 {
     return input.charAt(0).toUpperCase() + input.slice(1)
     //.toLowerCase() //make first letter capital
 }
+

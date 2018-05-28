@@ -33,7 +33,7 @@ class DateParser {
 
         if (contextual && daysAway <= 14 && daysAway >= 0) //27/5 into  "next friday 1200 pm"
         {
-            if(endDate.getDate() == nowDate.getDate() && endDate.getMonth() == nowDate.getMonth() && endDate.getFullYear() == nowDate.getFullYear())//if it is today
+            if(endDate.getUTCDate() == nowDate.getUTCDate() && endDate.getUTCMonth() == nowDate.getUTCMonth() && endDate.getUTCFullYear() == nowDate.getUTCFullYear())//if it is today
             {
                 return `TODAY ${hour}:${min}${ext}`
             }
