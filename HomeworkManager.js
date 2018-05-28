@@ -1,4 +1,5 @@
 let fs = require('fs')
+const DateParser = require('./DateParser.js')
 
 class HomeworkManager {
 
@@ -90,7 +91,7 @@ class HomeworkManager {
                 output = output + `<b>${subject}</b>: \n`
 
                 homeworks.forEach(function (homework, id) {
-                    output = output + `   ${self.list.indexOf(homework)}) <b>${homework._name}</b> ${self.ICalToPresentable(homework._deadline)} \n`
+                    output = output + `   ${self.list.indexOf(homework)}) <b>${homework._name}</b> ${DateParser.ICalToPresentable(homework._deadline)} \n`
                 })
 
                 output = output + "\n"
@@ -98,7 +99,7 @@ class HomeworkManager {
         }
         else {
             this.list.forEach(function (hmwk, id) {
-                var hmwkFormatted = `${id})${hmwk._subject} ${hmwk._name} <b>${self.ICalToPresentable(hmwk._deadline)}</b>` //0) Math Hmwk_Name 24-May
+                var hmwkFormatted = `${id})${hmwk._subject} ${hmwk._name} <b>${DateParser.ICalToPresentable(hmwk._deadline,true)}</b>` //0) Math Hmwk_Name 24-May
                 output = output + hmwkFormatted + "\n"
             })
         }
@@ -109,58 +110,20 @@ class HomeworkManager {
     HmwkFormatted(index) {
         if (index >= 0 && index < this.list.length) {
             var hmwk = this.list[index]
-            return `${hmwk._subject} ${hmwk._name} ${this.ICalToPresentable(hmwk._deadline)}`
+            return `${hmwk._subject} ${hmwk._name} ${DateParser.ICalToPresentable(hmwk._deadline)}`
         }
         else {
             return ''
         }
     }
 
-    ICalToPresentable(date,contextual)
-    {
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-        var output = ""
-
-        var year = date.substr(0,4)
-        var monthIndex = parseInt(date.substr(4,2))-1
-        var day = date.substr(6,2)
-        //var hour = date.substr(9,2)
-        var hour = parseInt(date.substr(9,2)) 
-        var min = date.substr(11,2)
-
-        var ext = "am"
-        
-        if(hour > 11)
-        {
-            ext = "pm"
-            hour = hour - 12
-        }
-        
-
-        if (contextual) //27/5 into  "next friday 1200 pm"
-        {
-            var days = ["Mon,Tues,Wed,Thurs,Fri,Sat,Sun"]
-            var day = days[new Date(year,month,day,hour,min).getDate()]
-        }
-        else
-        {
-            var month = ""
-            if(monthIndex >= 0 && monthIndex < months.length )
-            {
-                month = months[monthIndex]
-            }
-    
-            //output = `d:${day} m:${month} y:${year} HH: ${hour} MM: ${min}`
-            output = `${day} ${month} ${hour}:${min}${ext}`
-            return output
-        }
-    }
-
 }
 
-// var manager = new HomeworkManager()
-// manager.Load()
+var manager = new HomeworkManager()
+manager.Load()
 // console.log(manager.Show(true))
 
-//console.log(manager.ICalToPresentable('20180822T1022'))
+// console.log(DateParser.ICalToPresentable('20180822T1022'))
+
+console.log(manager.Show())
 module.exports = HomeworkManager;
