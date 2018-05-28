@@ -28,5 +28,10 @@
         "_name": "Stoich Quiz",
         "_deadline": "20180604T2359",
         "_subject": "Chem"
+    },
+    {
+        "_name": "HW3",
+        "_deadline": "20180604T1800",
+        "_subject": "Math"
     }
 ]
