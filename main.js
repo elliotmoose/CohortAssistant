@@ -4,6 +4,7 @@ const path = require('path')
 const Homework = require('./Homework.js')
 const HomeworkManager = require('./HomeworkManager.js')
 const WhitelistManager = require('./WhitelistManager.js')
+const DateParser = require('./DateParser.js')
 
 const Telegraf = require('telegraf')
 const bot = new Telegraf('604131058:AAGTND-Yr4GNyNwCJMx-YWL-0JrtUdZ_nGM')
@@ -31,8 +32,6 @@ bot.command('show', function (ctx) {
 })
 
 bot.command('add', function (ctx) {
-    
-
     if(!whitelist.IsWhitelisted(ctx.chat.id))
     {
         ctx.reply("Sorry you dont have permissions yet")
@@ -116,6 +115,7 @@ bot.command('grant',function(ctx)
 //WHEN BUTTON IS PRESSED
 bot.on("callback_query", (ctx) => {
     //console.log(ctx.callbackQuery.data)
+    console.log(ctx.chat.id)
     ctx.editMessageText(GetMenuText(ctx.callbackQuery.data), {
         reply_markup: {
             inline_keyboard: GetMenuOptions(ctx.callbackQuery.data)
@@ -136,6 +136,7 @@ function GetMenuText(mode) {
 
         case 'show-deadline':
             {
+
                 return manager.Show(false)
             }
         case 'show-subject':
@@ -195,9 +196,9 @@ bot.startPolling()
 
 function FormatDeadline(input)
 {
-    console.log("Format:"+input)
-    //shell.exec(`./formate ${name} ${adsad}`)
-    return input
+    
+    return DateParser.ParseDateToICal(input)
+    
 }
 
 function CapsFirstLetter(input)
