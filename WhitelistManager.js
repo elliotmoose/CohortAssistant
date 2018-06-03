@@ -16,10 +16,8 @@ class WhitelistManager
     }
 
     Grant(chatID) {
-        this._list.push(chatID)
+        this.list.push(chatID)
         this.Save()
-        this.Load()
-
         console.log("Whitelisted " + chatID)
     }
 
@@ -41,7 +39,7 @@ class WhitelistManager
     Save() {
         let self = this
 
-        fs.writeFile('whitelist.json', JSON.stringify(this._list), function (err) {
+        fs.writeFile('whitelist.json', JSON.stringify(self.list), function (err) {
             if (err) {
                 throw err
             }
@@ -51,10 +49,10 @@ class WhitelistManager
     }
 
     Load() {
+        let self = this
         if (fs.existsSync('whitelist.json')) {
             var data = fs.readFileSync('whitelist.json')
-            this.list = JSON.parse(data)[0]
-            
+            self.list = JSON.parse(data)
         }
         else {
             console.log('Whitelist file does not exist. Attempting to initialize')

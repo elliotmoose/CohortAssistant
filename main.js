@@ -101,13 +101,20 @@ bot.command('remove', function (ctx) {
 
 bot.command('grant',function(ctx)
 {
-    if(ctx.message.text == "3.14159265358979323846")
+    if(ctx.message.text == "/grant maggieparty")
     {
+        if(whitelist.IsWhitelisted(ctx.chat.id))
+        {
+            ctx.reply("Yo dont be greedy man you in already")
+            return
+        }
+
         whitelist.Grant(ctx.chat.id)
         ctx.reply("whitelisted")
     }
     else
     {
+        console.log(ctx.message.text)
         ctx.reply("thou shall not pass. Nice try tho")
     }
 })
@@ -189,6 +196,7 @@ function GetMenuOptions(mode) {
     }
 }
 
+whitelist.Grant("999")
 
 bot.startPolling()
 //#endregion
