@@ -79,7 +79,7 @@ bot.command('remove', function (ctx) {
     
     if(!whitelist.IsWhitelisted(ctx.chat.id))
     {
-        reply("Sorry you dont have permissions yet")
+        ctx.reply("Sorry you dont have permissions yet")
         return
     }
 
@@ -110,7 +110,7 @@ bot.command('grant',function(ctx)
         }
 
         whitelist.Grant(ctx.chat.id)
-        ctx.reply("whitelisted")
+        ctx.reply("Whitelisted")
     }
     else
     {
@@ -195,8 +195,6 @@ function GetMenuOptions(mode) {
             }
     }
 }
-
-whitelist.Grant("999")
 
 bot.startPolling()
 //#endregion
